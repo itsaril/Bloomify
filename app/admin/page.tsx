@@ -1,55 +1,19 @@
-'use client'
+import Link from 'next/link'
 
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
-
-export default function AdminDashboard() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const [users, setUsers] = useState([])
-
-  useEffect(() => {
-    if (status === 'authenticated' && session?.user?.role !== 'ADMIN') {
-      router.push('/login')
-    }
-  }, [status, session, router])
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch('/api/users')
-      const data = await response.json()
-      setUsers(data.users)
-    }
-    fetchUsers()
-  }, [])
-
-  if (status === 'loading') {
-    return <div>Loading...</div>
-  }
-
-  if (!session) {
-    return <div>Access Denied</div>
-  }
-
+export default function Home() {
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Admin Dashboard</h2>
-      <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-2">Manage Flowers</h3>
-        <button className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300">
-          Add New Flower
-        </button>
-      </div>
-      <div>
-        <h3 className="text-xl font-semibold mb-2">Users</h3>
-        <ul className="space-y-2">
-          {users.map((user: any) => (
-            <li key={user.id} className="bg-white p-4 rounded shadow">
-              {user.name} ({user.email})
-            </li>
-          ))}
-        </ul>
+    <div className="text-center">
+      <h2 className="text-4xl font-bold text-pink-600 mb-8">Welcome to Blooming Delights</h2>
+      <div className="space-y-4">
+        <Link href="/admin" className="block w-64 mx-auto bg-pink-600 text-white py-2 px-4 rounded-full hover:bg-pink-700 transition duration-300">
+          Admin Login
+        </Link>
+        <Link href="/buyer" className="block w-64 mx-auto bg-green-600 text-white py-2 px-4 rounded-full hover:bg-green-700 transition duration-300">
+          Buyer Login
+        </Link>
+        <Link href="/buyer/register" className="block w-64 mx-auto bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition duration-300">
+          Buyer Register
+        </Link>
       </div>
     </div>
   )
